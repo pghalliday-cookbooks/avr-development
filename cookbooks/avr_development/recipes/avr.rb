@@ -12,8 +12,16 @@ avrdude
 autoconf
 automake
 libtool
+minicom
 }.each do |name|
   package name
+end
+
+# permissions for serial device
+group 'dialout' do
+  action :modify
+  members login_user
+  append true
 end
 
 git "#{login_home}/simulavr" do
