@@ -1,0 +1,8 @@
+name 'avr_development'
+maintainer 'Peter Halliday'
+maintainer_email 'pghalliday@gmail.com'
+license 'all_rights'
+description 'Prepares an AVR development environment'
+long_description 'Prepares an Elixir development environment'
+version '0.1.0'
+depends 'apt'

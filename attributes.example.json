@@ -1,0 +1,10 @@
+{
+  "avr_development": {
+    "user": "username",
+    "group": "groupname",
+    "home": "/home/username"
+  },
+  "run_list": [
+    "recipe[avr_development::default]"
+  ]
+}
