@@ -57,6 +57,7 @@ bash 'install_simulavr' do
   code <<-EOH
   cd #{login_home}/simulavr
   make install
+  ldconfig
   EOH
   action :nothing
 end
