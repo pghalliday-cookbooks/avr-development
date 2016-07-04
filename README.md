@@ -1,6 +1,6 @@
 # avr-development
 
-As root
+On a 32 bit Ubuntu Server installation as root
 
 ```
 sudo su -
