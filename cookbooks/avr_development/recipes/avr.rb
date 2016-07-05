@@ -70,7 +70,6 @@ bash 'install_mfile' do
   code <<-EOH
   set -e
   tar zxf /usr/local/src/mfile.tar.gz -C /usr/local/share
-  sed -i 's|^#!/usr/local/bin/tixwish|#!/usr/bin/wish|' /usr/local/share/mfile/mfile.tcl
   ln -fs /usr/local/share/mfile/mfile.tcl /usr/local/bin/mfile
   EOH
   action :nothing
@@ -80,4 +79,13 @@ end
 remote_file '/usr/local/share/mfile/mfile.tcl' do
   source 'https://raw.githubusercontent.com/zarthcode/MFile/master/mfile.tcl'
   checksum '8c0d1cca7233c606b8ed8b7738e090845adaa73c0028a15d51f0b6fc94a009d0'
+  notifies :run, 'bash[update_mfile]', :immediately
+end
+
+bash 'update_mfile' do
+  code <<-EOH
+  set -e
+  sed -i 's|^#!/bin/wish|#!/usr/bin/wish|' /usr/local/share/mfile/mfile.tcl
+  EOH
+  action :nothing
 end
