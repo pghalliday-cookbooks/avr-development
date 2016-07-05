@@ -61,3 +61,29 @@ bash 'install_simulavr' do
   EOH
   action :nothing
 end
+
+# mfile dependencies
+%w{
+tk
+}.each do |name|
+  package name
+end
+
+remote_file "#{login_home}/mfile.tar.gz" do
+  source 'http://www.sax.de/~joerg/mfile/mfile.tar.gz'
+  owner login_user
+  group login_group
+  checksum 'e374c5b686db504b01ad6bfed155b431f2f85bbcd3699fb758da82920adb21e7'
+  notifies :run, 'bash[install_mfile]', :immediately
+end
+
+bash 'install_mfile' do
+  code <<-EOH
+  set -e
+  cd #{login_home}
+  tar zxf mfile.tar.gz -C /usr/local/share
+  sed -i 's|^#!/usr/local/bin/tixwish|#!/usr/bin/wish|' /usr/local/share/mfile/mfile.tcl
+  ln -fs /usr/local/share/mfile/mfile.tcl /usr/local/bin/mfile
+  EOH
+  action :nothing
+end
