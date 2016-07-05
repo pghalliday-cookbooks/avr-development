@@ -4,3 +4,6 @@
 [submodule "cookbooks/compat_resource"]
 	path = cookbooks/compat_resource
 	url = https://github.com/chef-cookbooks/compat_resource.git
+[submodule "cookbooks/dotfiles"]
+	path = cookbooks/dotfiles
+	url = https://github.com/pghalliday-cookbooks/dotfiles.git
