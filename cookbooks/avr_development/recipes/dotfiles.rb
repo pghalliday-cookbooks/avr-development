@@ -30,6 +30,21 @@ file authorized_keys_file do
   mode 0600
 end
 
+bash 'github_known_host' do
+  code <<-EOH
+  ssh-keyscan -t rsa github.com >> #{ssh_dir}/known_hosts
+  EOH
+  user login_user
+  not_if "grep -e '^github.com\\(,[^ ]*\\)\\? ' #{ssh_dir}/known_hosts"
+end
+
+bash 'root_github_known_host' do
+  code <<-EOH
+  ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
+  EOH
+  not_if "grep -e '^github.com\\(,[^ ]*\\)\\? ' /root/.ssh/known_hosts"
+end
+
 directory dotfiles_dir do
   owner login_user
   group login_group
@@ -66,9 +81,9 @@ end
 
 bash 'setup_dotfiles' do
   code <<-EOH
+  set -e
   export HOME=#{login_home}
-  cd #{dotfiles_scripts_dir}
-  ./terminal-setup.sh
+  #{dotfiles_scripts_dir}/terminal-setup.sh
   EOH
   user login_user
   action :nothing
@@ -76,8 +91,9 @@ end
 
 bash 'setup_root_dotfiles' do
   code <<-EOH
-  cd #{dotfiles_scripts_dir}
-  ./terminal-setup.sh
+  set -e
+  export HOME=/root
+  #{dotfiles_scripts_dir}/terminal-setup.sh
   EOH
   action :nothing
 end

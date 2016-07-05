@@ -42,6 +42,7 @@ end
 
 bash 'install_simulavr' do
   code <<-EOH
+  set -e
   cd #{simulavr_src}
   ./bootstrap
   ./configure
