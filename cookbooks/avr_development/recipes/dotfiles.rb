@@ -52,14 +52,32 @@ tmux
   end
 end
 
-bash 'dotfiles' do
+git dotfiles_scripts_dir do
+  repository 'git@github.com:pghalliday-dotfiles/scripts.git'
+  user login_user
+  group login_group
+  enable_checkout false
+  checkout_branch 'master'
+  revision 'master'
+  action :sync
+  notifies :run, 'bash[setup_dotfiles]', :immediately
+  notifies :run, 'bash[setup_root_dotfiles]', :immediately
+end
+
+bash 'setup_dotfiles' do
   code <<-EOH
   export HOME=#{login_home}
-  ssh-keyscan -t rsa github.com >> #{ssh_dir}/known_hosts
-  git clone git@github.com:pghalliday-dotfiles/scripts.git #{dotfiles_scripts_dir}
   cd #{dotfiles_scripts_dir}
   ./terminal-setup.sh
   EOH
   user login_user
-  not_if do ::File.exists?(dotfiles_scripts_dir) end
+  action :nothing
+end
+
+bash 'setup_root_dotfiles' do
+  code <<-EOH
+  cd #{dotfiles_scripts_dir}
+  ./terminal-setup.sh
+  EOH
+  action :nothing
 end
